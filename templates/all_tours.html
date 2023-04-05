@@ -2,9 +2,20 @@
 
 {% block content %}
 <title>Путешествия</title>
+
+{% if not tours and not last_tour %}
+<center>
+  <br>
+  <br>
+  <br>
+  <h1 style="color:white;font-family:century gothic;">Ничего не найдено</h1>
+</center>
+{% else %}
+
 <center>
 <h1 style="color:white;font-family:century gothic;">Космические туры</h1></center>
 <br>
+
 {% for tour in tours %}
 <div class="row row-cols-1 row-cols-md-2 g-4">
   <div class="col">
@@ -17,7 +28,12 @@
           <p>Ближайшая дата:   {{ tour[0].start_date.date() }}</p>
           <p>Стоимость:  {{ tour[0].price }} руб.</p>
   </div>
-        <a href="#" class="btn btn-outline-success">Подробнее</a>
+        <a href="/more_detailed/{{ tour[0].id }}" class="btn btn-outline-success">Подробнее</a>
+        {% if tour in current_user.tours %}
+          <a href="#">В избранном </a>
+        {% else %}
+        <a href="/add_to_favourites/{{ tour[0].id }}" class="btn btn-outline-success">В избранное</a>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -31,7 +47,8 @@
           <p>Ближайшая дата:   {{ tour[1].start_date.date() }}</p>
           <p>Стоимость:  {{ tour[1].price }} руб.</p>
   </div>
-        <a href="#" class="btn btn-outline-success">Подробнее</a>
+        <a href="/more_detailed/{{ tour[1].id }}" class="btn btn-outline-success">Подробнее</a>
+        <a href="#" class="btn btn-outline-success">В избранное</a>
       </div>
     </div>
   </div>
@@ -51,10 +68,12 @@
           <p>Ближайшая дата:   {{ last_tour[0].start_date.date() }}</p>
           <p>Стоимость:  {{ last_tour[0].price }} руб.</p>
   </div>
-        <a href="#" class="btn btn-outline-success">Подробнее</a>
+        <a href="/more_detailed/{{ last_tour[0].id }}" class="btn btn-outline-success">Подробнее</a>
+        <a href="#" class="btn btn-outline-success">В избранное</a>
       </div>
     </div>
   </div>
 </div>
 {%endif%}
+{% endif %}
 {% endblock %}

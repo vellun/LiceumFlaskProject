@@ -20,8 +20,8 @@
             Space Cruises
         </a>
 
-        <form id="base_form" action="/search">
-            <a class="nav-link active" aria-current="page" href="/all_tours"
+        <form id="base_form" action="/search_tours" method="POST">
+            <a class="nav-link active" aria-current="page" href="/search_tours"
                style="color:white;font-family:century gothic;font-size: 23px;position: relative;right:750px;color:#e5dfe5">Все
                 туры</a>
 
@@ -30,7 +30,7 @@
                 нас</a>
 
 
-                <input id="input_search" type="text" placeholder="Искать полеты...">
+            <input id="input_search" type="text" placeholder="Искать полеты..." name="search">
             <button id="submit_btn" type="submit"></button>
         </form>
 
@@ -43,8 +43,14 @@
              aria-labelledby="offcanvasDarkNavbarLabel">
             <div class="offcanvas-header">
                 {% if current_user.is_authenticated %}
-                <a class="nav-link active style=font-family:century gothic" aria-current="page" href="/">{{current_user.name}}
+
+
+                <a class="nav-link active style=font-family:century gothic" aria-current="page" href="/profile">
+                    {% if not current_user.avatar %} <img src="/static/img/avatar.jpg" alt="Avatar" class="avatar">
+                    {% else %} <img src={{current_user.avatar}} alt="Avatar" class="avatar"> {% endif %}
+                    {{current_user.name}}
                     {{current_user.surname}}</a>
+
                 {% else %}
                 <a class="nav-link active style=font-family:century gothic" aria-current="page" href="/login">Вход/Регистрация</a>
                 {% endif %}

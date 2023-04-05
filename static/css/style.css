@@ -52,3 +52,23 @@
     font-family:century gothic
     }
 
+.avatar {
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.profile_avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+#carousel-caption {
+  position: absolute;
+  bottom: 35%;
+  z-index: 20;
+}
+
+

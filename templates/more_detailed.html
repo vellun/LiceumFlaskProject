@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<title>Подробнее</title>
+
+<div id="carouselExampleCaptions" class="carousel slide">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="{{tour.image}}" class="d-block w-100" alt="...">
+            <div class="carousel-caption" id="carousel-caption">
+                <h2 style="font-family:century gothic;font-size:67px;color:white">{{ tour.name }}</h2>
+                <p style="font-family:century gothic;font-size:25px">{{tour.start_date.date()}} - {{tour.end_date.date()}}</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}
