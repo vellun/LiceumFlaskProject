@@ -71,4 +71,9 @@
   z-index: 20;
 }
 
+::selection {
+background: #4b6e3f;
+}
+
+
 

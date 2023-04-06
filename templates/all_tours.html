@@ -29,7 +29,7 @@
           <p>Стоимость:  {{ tour[0].price }} руб.</p>
   </div>
         <a href="/more_detailed/{{ tour[0].id }}" class="btn btn-outline-success">Подробнее</a>
-        {% if tour in current_user.tours %}
+        {% if tour[0].id in inds %}
           <a href="#">В избранном </a>
         {% else %}
         <a href="/add_to_favourites/{{ tour[0].id }}" class="btn btn-outline-success">В избранное</a>
@@ -48,7 +48,11 @@
           <p>Стоимость:  {{ tour[1].price }} руб.</p>
   </div>
         <a href="/more_detailed/{{ tour[1].id }}" class="btn btn-outline-success">Подробнее</a>
-        <a href="#" class="btn btn-outline-success">В избранное</a>
+        {% if tour[1].id in inds %}
+          <a href="#">В избранном </a>
+        {% else %}
+        <a href="/add_to_favourites/{{ tour[1].id }}" class="btn btn-outline-success">В избранное</a>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -69,7 +73,11 @@
           <p>Стоимость:  {{ last_tour[0].price }} руб.</p>
   </div>
         <a href="/more_detailed/{{ last_tour[0].id }}" class="btn btn-outline-success">Подробнее</a>
-        <a href="#" class="btn btn-outline-success">В избранное</a>
+        {% if last_tour[0].id in inds %}
+          <a href="#">В избранном </a>
+        {% else %}
+        <a href="/add_to_favourites/{{ last_tour[0].id }}" class="btn btn-outline-success">В избранное</a>
+        {% endif %}
       </div>
     </div>
   </div>

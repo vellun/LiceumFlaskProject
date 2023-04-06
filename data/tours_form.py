@@ -25,3 +25,4 @@ class Tour(SqlAlchemyBase, SerializerMixin):
     end_date = sqlalchemy.Column(sqlalchemy.DateTime)
     image = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     price = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    full_description = sqlalchemy.Column(sqlalchemy.String, nullable=True)

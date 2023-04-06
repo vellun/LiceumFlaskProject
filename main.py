@@ -47,15 +47,18 @@ def search():  # Функция для показа всех туров или �
     tours = [tours[i:i + 2] for i in range(0, len(tours), 2)]  # Формируем туры по парам чтобы расположить на странице
     if tours and len(tours[-1]) % 2:  # Если в последнюю пару попал один тур, записываем его в отдельную переменную
         last_tour, tours = tours[-1], tours[:-1]
-    return render_template("all_tours.html", tours=tours, last_tour=last_tour)
+    inds = [i.id for i in current_user.tours] if current_user.is_authenticated else []
+    return render_template("all_tours.html", tours=tours, last_tour=last_tour, inds=inds)
 
 
 @app.route('/add_to_favourites/<int:id>')
+@login_required
 def add_to_favourites(id):  # Функция для добавления тура в избранное
     db_sess = create_session()
     tour = db_sess.query(Tour).filter(Tour.id == id).first()
 
     current_user.tours.append(tour)
+
     db_sess.commit()
     return redirect("/search_tours")
 
@@ -127,8 +130,13 @@ def login():
 
 
 @app.errorhandler(404)
-def error_404(error):
-    return jsonify({"error": 'Address not found'})
+def not_found(error):
+    return jsonify({'error': 'Not found'}), 404
+
+
+@app.errorhandler(401)
+def not_authenticated(_):
+    return redirect("/login")
 
 
 if __name__ == '__main__':
