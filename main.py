@@ -129,6 +129,11 @@ def login():
     return render_template('login.html', form=form)
 
 
+@app.route('/about_us')
+def about_us():
+    return render_template("about_us.html")
+
+
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({'error': 'Not found'}), 404
