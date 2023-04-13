@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<title>Редактировать профиль</title>
+<br>
+<center>
+    <h2 style="font-family:century gothic;font-size:42px;color:white">Редактировать профиль</h2>
+</center>
+<br>
+<br>
+<br>
+
+<form method="post" enctype="multipart/form-data" style="color:white;font-family:century gothic;margin-left: 200px;">
+        <a class="nav-link active style=font-family:century gothic" aria-current="page" href="#">
+                    {% if not current_user.avatar %} <img src="/static/img/avatar.jpg" alt="Avatar" class="profile_avatar">
+                    {% else %} <img src={{current_user.avatar}} alt="Avatar" class="profile_avatar"> {% endif %}</a>
+    {{ upload_form.hidden_tag() }}
+    <br>
+    <p style="font-size:22px">Установить фото профиля</p>
+    {{ upload_form.file(class="btn btn-outline-light") }}
+    <br>
+    {% for error in upload_form.file.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    <br>
+    <p>{{ upload_form.save(type="submit", value="Сохранить", class="btn btn-outline-success") }}</p>
+    <p>{{message}}</p>
+    </form>
+<br>
+
+<form action="" method="post" style="color:white;font-family:century gothic;margin-left:200px;position: absolute;
+        top:45%;right:10%">
+    {{ form.hidden_tag() }}
+    <p class="ph">
+        {{ form.name.label }}<br>
+        {{ form.name(class="form-control form-control-sm", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:37px") }}<br>
+        {% for error in form.name.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    <p class="ph">
+        {{ form.surname.label }}<br>
+        {{ form.surname(class="form-control form-control-sm", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:37px") }}<br>
+        {% for error in form.surname.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    </p>
+    <p class="ph">
+        {{ form.email.label }}<br>
+        {{ form.email(class="form-control form-control-sm", type="email", style="background-image:
+        url(/static/img/sky.jpg);color: white;height:37px") }}<br>
+        {% for error in form.email.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    </p>
+
+    <p class="ph">{{ form.submit(type="submit", class="btn btn-outline-success", value="Сохранить") }}</p>
+
+</form>
+{% endblock %}

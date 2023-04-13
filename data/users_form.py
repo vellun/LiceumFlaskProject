@@ -1,4 +1,3 @@
-import datetime
 import sqlalchemy
 from flask_login import UserMixin
 from sqlalchemy import orm
@@ -17,9 +16,12 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     email = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     avatar = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    is_admin = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
 
     tours = orm.relationship("Tour", secondary="users_to_tours",
                              backref="users")  # Атрибут для получения списка туров пользователя
+
+    feedbacks = orm.relationship("Feedback", back_populates='author')  # Список отзывов пользователя
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

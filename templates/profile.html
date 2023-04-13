@@ -5,18 +5,14 @@
 <div style="margin-left: 300px">
     <br>
     <br>
-    <form method="post" enctype="multipart/form-data">
-        <a class="nav-link active style=font-family:century gothic" aria-current="page" href="#">
+    <br>
+    <a class="nav-link active style=font-family:century gothic" aria-current="page" href="#">
                     {% if not current_user.avatar %} <img src="/static/img/avatar.jpg" alt="Avatar" class="profile_avatar">
                     {% else %} <img src={{current_user.avatar}} alt="Avatar" class="profile_avatar"> {% endif %}</a>
-    {{ form.hidden_tag() }}
-    {{ form.file }}
-    <input type="submit">
-    </form>
     <br>
     <p style="color: white;font-family:century gothic;font-size: 26px">{{ current_user.name }} {{ current_user.surname }}</p>
     <br>
-    <a href="#" class="btn btn-outline-success">Редактировать профиль</a>
+    <a href="/edit_profile" class="btn btn-outline-success">Редактировать профиль</a>
 
 </div>
 

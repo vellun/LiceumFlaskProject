@@ -1,0 +1,86 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<title>Путешествия</title>
+
+<a href="/admin/download_tours" download="all_tours.json" class="btn btn-outline-light"
+   style="font-family:century gothic;font-size:20px;width:260px;height:42px;position:absolute;left:76%"
+   title="Скачать json со всеми турами">Загрузить json-файл</a>
+
+<center>
+    <h1 style="color:white;font-family:century gothic;">Космические туры</h1></center>
+<br>
+
+
+{% for tour in tours %}
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    <div class="col">
+        <div class="card"
+             style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic">
+            <img src={{tour[0].image}} class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ tour[0]["name"] }}</h5>
+                <p class="card-text">{{ tour[0].discription }}</p>
+                <div style="color:#ebe5da">
+
+                    <p>Стоимость: {{ tour[0].price }} руб.</p>
+                </div>
+                <a href="/admin/edit_tour/{{ tour[0].id }}" class="btn btn-dark">Редактировать</a>
+                <a href="/admin/delete_tour/{{ tour[0].id }}" class="btn btn-danger">Удалить</a>
+
+                <a href="/admin/download_tours/{{ tour[0].id }}" download="tour_{{tour[0].id}}.json"
+                   title="Скачать json для тура {{tour[0].id}}" class="btn btn-outline-light"
+                style="position:absolute;right:3%">Загрузить json</a>
+
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card"
+             style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic">
+            <img src={{tour[1].image}} class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ tour[1].name }}</h5>
+                <p class="card-text">{{ tour[1].discription }}</p>
+                <div style="color:#ebe5da">
+
+                    <p>Стоимость: {{ tour[1].price }} руб.</p>
+                </div>
+                <a href="/admin/edit_tour/{{ tour[1].id }}" class="btn btn-dark">Редактировать</a>
+                <a href="/admin/delete_tour/{{ tour[1].id }}" class="btn btn-danger">Удалить</a>
+
+                <a href="/admin/download_tours/{{ tour[1].id }}" download="tour_{{tour[1].id}}.json"
+                   title="Скачать json для тура {{tour[1].id}}" class="btn btn-outline-light"
+                style="position:absolute;right:3%">Загрузить json</a>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+{%endfor%}
+{% if last_tour %}
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    <div class="col">
+        <div class="card"
+             style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic">
+            <img src={{last_tour[0].image}} class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ last_tour[0].name }}</h5>
+                <p class="card-text">{{ last_tour[0].discription }}</p>
+                <div style="color:#ebe5da">
+
+                    <p>Стоимость: {{ last_tour[0].price }} руб.</p>
+                </div>
+                <a href="/admin/edit_tour/{{ last_tour[0].id }}" class="btn btn-dark">Редактировать</a>
+                <a href="/admin/delete_tour/{{ last_tour[0].id }}" class="btn btn-danger">Удалить</a>
+
+                <a href="/admin/download_tours/{{ last_tour[0].id }}" download="tour_{{last_tour[0].id}}.json"
+                   title="Скачать json для тура {{last_tour[0].id}}" class="btn btn-outline-light"
+                style="position:absolute;right:3%">Загрузить json</a>
+            </div>
+        </div>
+    </div>
+</div>
+{%endif%}
+{% endblock %}

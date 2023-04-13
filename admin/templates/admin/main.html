@@ -1,0 +1,37 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="row" >
+  <div class="col-sm-6 mb-3 mb-sm-0">
+    <div class="card" style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic;
+                          width:550px;left:150px">
+      <div class="card-body">
+        <h5 class="card-title">Доступные туры: {{tours}}</h5>
+        <a href="/admin/tours_management" class="btn btn-dark">К управлению</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card" style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic;
+                          width:550px;right:-30px">
+      <div class="card-body">
+        <h5 class="card-title">Отзывы: {{feedbacks}}</h5>
+        <a href="#" class="btn btn-dark">К управлению</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6">
+    <br>
+  <br>
+    <div class="card" style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic;
+                          width:550px;left:470px">
+      <div class="card-body">
+        <h5 class="card-title">Зарегистрированные пользователи: {{users}}</h5>
+        <a href="#" class="btn btn-dark">К управлению</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
