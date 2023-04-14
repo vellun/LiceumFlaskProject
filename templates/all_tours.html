@@ -3,84 +3,129 @@
 {% block content %}
 <title>Путешествия</title>
 
-{% if not tours and not last_tour %}
+{% if favs and not current_user.tours %}
 <center>
-  <br>
-  <br>
-  <br>
-  <h1 style="color:white;font-family:century gothic;">Ничего не найдено</h1>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1 style="color:white;font-family:century gothic;">Вы пока не добавили туры в избранное</h1>
+    <br>
+    <h3 style="color:white;font-family:century gothic;">Найдите путешествие по душе!</h3>
+    <br><br>
+
+<button onclick="document.location='/search_tours'" style="font-family:century gothic;font-size:23px;position: absolute;left:38%;width:300px;height:70px"
+        type="button" class="btn btn-outline-light">К турам
+</button>
+</center>
+
+{% elif not tours and not last_tour %}
+<center>
+    <br>
+    <br>
+    <br>
+    <h1 style="color:white;font-family:century gothic;">Ничего не найдено</h1>
 </center>
 {% else %}
 
-<center>
-<h1 style="color:white;font-family:century gothic;">Космические туры</h1></center>
+{% if favs %}
+<center><h1 style="color:white;font-family:century gothic;">Избранные туры</h1></center>
 <br>
+{% else %}
+<center><h1 style="color:white;font-family:century gothic;">Космические туры</h1></center>
+<br>
+{% endif %}
 
 {% for tour in tours %}
 <div class="row row-cols-1 row-cols-md-2 g-4">
-  <div class="col">
-    <div class="card" style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic">
-      <img src={{tour[0].image}} class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">{{ tour[0].name }}</h5>
-        <p class="card-text">{{ tour[0].discription }}</p>
-        <div style="color:#ebe5da">
-          <p>Ближайшая дата:   {{ tour[0].start_date.date() }}</p>
-          <p>Стоимость:  {{ tour[0].price }} руб.</p>
-  </div>
-        <a href="/more_detailed/{{ tour[0].id }}" class="btn btn-outline-success">Подробнее</a>
-        {% if tour[0].id in inds %}
-          <a href="#">В избранном </a>
-        {% else %}
-        <a href="/add_to_favourites/{{ tour[0].id }}" class="btn btn-outline-success">В избранное</a>
-        {% endif %}
-      </div>
+    <div class="col">
+        <div class="card"
+             style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic">
+            <img src={{tour[0].image}} class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ tour[0].name }}</h5>
+                <p class="card-text">{{ tour[0].discription }}</p>
+                <div style="color:#ebe5da">
+                    <p>Ближайшая дата: {{ tour[0].start_date.date() }}</p>
+                    <p>Стоимость: {{ tour[0].price }} руб.</p>
+                </div>
+                <a href="/more_detailed/{{ tour[0].id }}" class="btn btn-success">Подробнее</a>
+                {% if favs %}
+                <a href="/fav_delete/{{ tour[0].id }}" class="btn btn-danger"
+                   style="position:absolute;right:3%">Удалить</a>
+                {% else %}
+                {% if tour[0].id in inds %}
+                <a href="/favourites" style="position:absolute;left:21%">В избранном </a>
+                {% else %}
+                <a href="/add_to_favourites/{{ tour[0].id }}" class="btn btn-success"
+                   style="position:absolute;left:21%">В избранное</a>
+                {% endif %}
+                {%endif%}
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="col">
-    <div class="card" style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic">
-      <img src={{tour[1].image}} class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">{{ tour[1].name }}</h5>
-        <p class="card-text">{{ tour[1].discription }}</p>
-        <div style="color:#ebe5da">
-          <p>Ближайшая дата:   {{ tour[1].start_date.date() }}</p>
-          <p>Стоимость:  {{ tour[1].price }} руб.</p>
-  </div>
-        <a href="/more_detailed/{{ tour[1].id }}" class="btn btn-outline-success">Подробнее</a>
-        {% if tour[1].id in inds %}
-          <a href="#">В избранном </a>
-        {% else %}
-        <a href="/add_to_favourites/{{ tour[1].id }}" class="btn btn-outline-success">В избранное</a>
-        {% endif %}
-      </div>
+    <div class="col">
+        <div class="card"
+             style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic">
+            <img src={{tour[1].image}} class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ tour[1].name }}</h5>
+                <p class="card-text">{{ tour[1].discription }}</p>
+                <div style="color:#ebe5da">
+                    <p>Ближайшая дата: {{ tour[1].start_date.date() }}</p>
+                    <p>Стоимость: {{ tour[1].price }} руб.</p>
+                </div>
+                <a href="/more_detailed/{{ tour[1].id }}" class="btn btn-success">Подробнее</a>
+
+                {% if favs %}
+                <a href="/fav_delete/{{ tour[1].id }}" class="btn btn-danger"
+                   style="position:absolute;right:3%">Удалить</a>
+                {% else %}
+
+                {% if tour[1].id in inds %}
+                <a href="/favourites" style="position:absolute;left:21%">В избранном </a>
+                {% else %}
+                <a href="/add_to_favourites/{{ tour[1].id }}" class="btn btn-success"
+                   style="position:absolute;left:21%">В избранное</a>
+                {% endif %}
+                {%endif%}
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <br>
 <br>
 {%endfor%}
 {% if last_tour %}
 <div class="row row-cols-1 row-cols-md-2 g-4">
-  <div class="col">
-    <div class="card" style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic">
-      <img src={{last_tour[0].image}} class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">{{ last_tour[0].name }}</h5>
-        <p class="card-text">{{ last_tour[0].discription }}</p>
-        <div style="color:#ebe5da">
-          <p>Ближайшая дата:   {{ last_tour[0].start_date.date() }}</p>
-          <p>Стоимость:  {{ last_tour[0].price }} руб.</p>
-  </div>
-        <a href="/more_detailed/{{ last_tour[0].id }}" class="btn btn-outline-success">Подробнее</a>
-        {% if last_tour[0].id in inds %}
-          <a href="#">В избранном </a>
-        {% else %}
-        <a href="/add_to_favourites/{{ last_tour[0].id }}" class="btn btn-outline-success">В избранное</a>
-        {% endif %}
-      </div>
+    <div class="col">
+        <div class="card"
+             style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic">
+            <img src={{last_tour[0].image}} class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ last_tour[0].name }}</h5>
+                <p class="card-text">{{ last_tour[0].discription }}</p>
+                <div style="color:#ebe5da">
+                    <p>Ближайшая дата: {{ last_tour[0].start_date.date() }}</p>
+                    <p>Стоимость: {{ last_tour[0].price }} руб.</p>
+                </div>
+                <a href="/more_detailed/{{ last_tour[0].id }}" class="btn btn-success">Подробнее</a>
+
+                {% if favs %}
+                <a href="/fav_delete/{{ last_tour[0].id }}" class="btn btn-danger"
+                   style="position:absolute;right:3%">Удалить</a>
+                {% else %}
+
+                {% if last_tour[0].id in inds %}
+                <a href="/favourites" style="position:absolute;left:21%">В избранном </a>
+                {% else %}
+                <a href="/add_to_favourites/{{ last_tour[0].id }}" class="btn btn-success"
+                   style="position:absolute;left:21%">В избранное</a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 {%endif%}
 {% endif %}

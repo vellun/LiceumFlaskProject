@@ -2,9 +2,9 @@ from flask import Flask, render_template, redirect, request, jsonify
 from flask_login import LoginManager, login_required, logout_user, current_user
 from flask_restful import Api
 
+from admin.admin import admin
 from api.tours_api import tour_resource
 from auth.auth import auth
-from admin.admin import admin
 from data.db_session import global_init, create_session
 from data.register_form import RegisterForm
 from data.tours_form import Tour
@@ -66,18 +66,43 @@ def search():  # Функция для показа всех туров или �
 def add_to_favourites(id):  # Функция для добавления тура в избранное
     db_sess = create_session()
     tour = db_sess.query(Tour).filter(Tour.id == id).first()
-
-    current_user.tours.append(tour)
-
+    local_user = db_sess.merge(current_user)
+    tour.users.append(local_user)  # Добавление пользователя в список к туру
     db_sess.commit()
     return redirect("/search_tours")
+
+
+@app.route('/favourites')
+@login_required
+def favourites():  # Функция для отображения избранных туров
+    last_tour = None
+
+    tours = current_user.tours
+    tours = [tours[i:i + 2] for i in range(0, len(tours), 2)]  # Формируем туры по парам чтобы расположить на странице
+    if tours and len(tours[-1]) % 2:  # Если в последнюю пару попал один тур, записываем его в отдельную переменную
+        last_tour, tours = tours[-1], tours[:-1]
+    return render_template("all_tours.html", tours=tours, last_tour=last_tour, favs=True)
+
+
+@app.route('/fav_delete/<int:tour_id>')
+@login_required
+def fav_delete(tour_id):  # Функция для удаления тура из избранного
+    db_sess = create_session()
+    del_tour = list(filter(lambda x: x.id == tour_id, current_user.tours))[0]
+
+    current_user.tours.remove(del_tour)  # Удаление из списка
+    db_sess.merge(current_user)
+    db_sess.commit()
+
+    return redirect("/favourites")
 
 
 @app.route('/more_detailed/<int:id>')
 def more_detailed(id):  # Подробнее о туре
     db_sess = create_session()
     tour = db_sess.query(Tour).filter(Tour.id == id).first()
-    return render_template("more_detailed.html", tour=tour)
+    inds = [i.id for i in current_user.tours] if current_user.is_authenticated else []
+    return render_template("more_detailed.html", tour=tour, inds=inds)
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -121,7 +146,6 @@ def edit_profile():  # Редактирование профиля пользо�
     elif upload_form.validate_on_submit() and upload_form.save.data:  # Если сработала форма изменения фото профиля
         if not upload_form.file.data.filename.split(".")[-1] in ["jpg", "jpeg", "png",
                                                                  "gif"]:  # Если выбранный файл не фото
-            # или отправлена пустая форма
             set_values()
             return render_template("edit_profile.html", form=form, upload_form=upload_form,
                                    message="Ошибка. Загрузите фото")
@@ -145,9 +169,9 @@ def not_found(error):
     return jsonify({'error': 'Not found'}), 404
 
 
-@app.errorhandler(401)
+@app.errorhandler(401)  # Ошибка аутентификации
 def not_authenticated(_):
-    return redirect("/login")
+    return redirect("/auth/login")
 
 
 def main():

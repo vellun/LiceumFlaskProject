@@ -18,12 +18,12 @@ def login():
     if form.validate_on_submit():
         db_sess = create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
-            return redirect("/")
-        return render_template('auth/login.html',
-                               message="Неправильный логин или пароль",
-                               form=form)
+        if not (user and user.check_password(form.password.data)):
+            return render_template('auth/login.html',
+                                   message="Неправильный логин или пароль",
+                                   form=form)
+        login_user(user, remember=form.remember_me.data)
+        return redirect("/search_tours")
     return render_template('auth/login.html', form=form)
 
 

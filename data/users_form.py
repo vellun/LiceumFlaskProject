@@ -6,6 +6,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from data.db_session import SqlAlchemyBase
 
+users_to_tours = sqlalchemy.Table(  # Вспомогательная таблица тк отношение многие ко многим
+    'users_to_tours',
+    SqlAlchemyBase.metadata,
+    sqlalchemy.Column('users', sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey('users.id')),
+    sqlalchemy.Column('tours', sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey('tours.id'))
+)
+
 
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'users'
@@ -17,9 +26,6 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     avatar = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     is_admin = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
-
-    tours = orm.relationship("Tour", secondary="users_to_tours",
-                             backref="users")  # Атрибут для получения списка туров пользователя
 
     feedbacks = orm.relationship("Feedback", back_populates='author')  # Список отзывов пользователя
 
