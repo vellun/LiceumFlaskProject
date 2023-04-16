@@ -25,7 +25,7 @@
         {{ error }}
     </p>
     {% endfor %}
-    </p>
+
     <p>
         {{ form.start_date.label }}<br>
         {{ form.start_date(class="form-control form-control-sm", style="background-image:
@@ -35,7 +35,7 @@
         {{ error }}
     </p>
     {% endfor %}
-    </p>
+
     <p>
         {{ form.end_date.label }}<br>
         {{ form.end_date(class="form-control form-control-sm", style="background-image:
@@ -45,7 +45,7 @@
         {{ error }}
     </p>
     {% endfor %}
-    </p>
+
     <p>
         {{ form.price.label }}<br>
         {{ form.price(class="form-control form-control-sm", style="background-image:
@@ -55,13 +55,44 @@
         {{ error }}
     </p>
     {% endfor %}
-    </p>
 
     <p>
         {{ form.full_description.label }}<br>
         {{ form.full_description(class="form-control form-control-sm", style="background-image:
         url(/static/img/sky.jpg);color:white;height:140px") }}<br>
         {% for error in form.full_description.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+
+    <p style="font-size:18px">Опишите программу тура</p>
+
+    <p>
+        {{ form.arrival.label }}<br>
+        {{ form.arrival(class="form-control form-control-sm", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:170px") }}<br>
+        {% for error in form.arrival.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+
+    <p>
+        {{ form.location.label }}<br>
+        {{ form.location(class="form-control form-control-sm", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:170px") }}<br>
+        {% for error in form.location.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+
+    <p>
+        {{ form.go_back.label }}<br>
+        {{ form.go_back(class="form-control form-control-sm", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:170px") }}<br>
+        {% for error in form.go_back.errors %}
     <p class="alert alert-danger" role="alert">
         {{ error }}
     </p>
@@ -77,7 +108,7 @@
         {{ error }}
     </p>
     {% endfor %}
-    </p>
+
     <br>
     <p>{{ form.submit(type="submit", class="btn btn-outline-success", value=sbmt) }}</p>
 

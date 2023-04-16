@@ -15,44 +15,181 @@
         </div>
     </div>
 </div>
+<p style="color:white;font-family:century gothic;font-size:22px;position: absolute;left:16%">
+
+    <a style="color:white" href="#program">Программа</a>
+    <a style="color:white" href="#bron">Бронь</a>
+    <a style="color:white" href="#feedbacks">Отзывы</a></p>
 
 <br>
 <br>
 <br>
 <div>
-    <div style="color: white; width: 800px;font-family:century gothic;font-size:25px;position: absolute;left:16%">{{
-        tour.full_description }}
+    <div style="color: white; width: 800px;font-family:century gothic;font-size:25px;position: absolute;left:16%">
+        {{ tour.full_description }}
 
-    <br>
-        <br>
-        <br>
+
     </div>
-    <p style="color:white;font-family:century gothic;font-size:31px;position: absolute;left:73%;width:300px;height:70px"
-            >{{ tour.price }} руб./чел.
+    <p style="color:white;font-family:century gothic;font-size:31px;position:relative;left:73%;width:300px;height:70px"
+    >{{ tour.price }} руб./чел.
     </p>
-</div>
 
-{% if tour.id in inds %}
-</div>
-    <button onclick="document.location='/favourites'" style="font-family:century gothic;font-size:23px;position: absolute;left:73%;width:300px;height:70px;top:106%"
-        type="button" class="btn btn-outline-light">В избранном ✓
-</button>
+    <div class="container-fluid"
+         style="position:relative;left:73%">
+        {% if tour.id in inds %}
+        <p>
+            <button onclick="document.location='/favourites'"
+                    style="width:300px;height:70px;font-family:century gothic;font-size:23px"
+                    type="button" class="btn btn-outline-light">В избранном ✓
+            </button>
+        </p>
+        {% else %}
+        <p>
+            <button onclick="document.location='/add_to_favourites/{{tour.id}}'"
+                    style="width:300px;height:70px;font-family:century gothic;font-size:23px"
+                    type="button" class="btn btn-outline-light">В избранное
+            </button>
+        </p>
+        {% endif %}
+        <p>
+            {% if tour.id in b_inds %}
+            <button style="width:300px;height:70px;font-family:century gothic;font-size:23px"
+                    onclick="document.location='/booked_tours'"
+                    type="button" class="btn btn-outline-light">Забронировано ✓
+            </button>
+            {% else %}
+            <button style="width:300px;height:70px;font-family:century gothic;font-size:23px"
+                    onclick="document.location='/send_app_form/{{tour.id}}'"
+                    type="button" class="btn btn-outline-light">Оставить заявку
+            </button>
+            {%endif%}
+        </p>
+    </div>
+    <br>
+    <br>
+    <br>
 
-</div>
+    <div style="color:white; width:800px;font-family:century gothic;font-size:22px;position:relative;left:16%;
+    border:3px #00B344 ridge;">
+        <i>Важно! Перед любым полетом необходимо проходить физическую подготовку в течении месяца. Она включена в
+            стоимость
+            путешествия.
+            Поэтому бронируйте туры не позже чем за месяц до вылета, чтобы успеть подготовиться.
+            Для полетов также необходима страховка. Ее оформление включено в стоимость.</i>
+    </div>
+    <br>
+    <br><br>
+    <h2 style="font-family:century gothic;position:relative;left:16%;color:white">Программа тура</h2><br>
 
-{% else %}
-</div>
-    <button onclick="document.location='/add_to_favourites/{{tour.id}}'" style="font-family:century gothic;font-size:23px;position: absolute;left:73%;width:300px;height:70px;top:106%"
-        type="button" class="btn btn-outline-light">В избранное
-</button>
+    <div id="program"
+         style="color:white; width:800px;font-family:century gothic;font-size:21px;position:relative;left:16%;">
+        Вылет осуществляется с космодрома Восточный. Место вылета находится на Дальнем Востоке в Амурской области вблизи
+        города Циолковский. Туда вам нужно будет добраться самостоятельно. Авиабилеты не включены в стоимость полета, но
+        мы можем помочь с их покупкой, при необходимости оставьте комментарий в заявке. Трансфер из аэропорта Восточный
+        до космодрома включен в стоимость.
+    </div>
+    <br>
+    <div style="position:relative;left:16%;">
+        <script type="text/javascript" charset="utf-8" async
+                src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A2ed60e72dc3c85cb3f0b7c213bfdfa34df76bf0e0fa0bd8d6b824b85953689c2&amp;width=610&amp;height=351&amp;lang=ru_RU&amp;scroll=true"></script>
+        <br><br>
+    </div>
+    <h4 style="font-family:century gothic;position:relative;left:16%;color:white">Полет и прибытие</h4><br>
 
-</div>
-{% endif %}
+    <div style="color:white; width:800px;font-family:century gothic;font-size:21px;position:relative;left:16%;">
+        {{tour.arrival}}<br><br>
+        <img width="800" height="470" alt="Здесь картинка жилья"
+             src="/static/img/tour_{{tour.id}}_pics/house_{{tour.id}}.jpg">
+        <p style="color:grey"><i>Марсианская туристическая база</i></p>
+    </div>
 
-</div>
-<button style="font-family:century gothic;font-size:23px;position: absolute;left:73%;top:117%;width:300px;height:70px"
-        type="button" class="btn btn-outline-light">Оставить заявку
-</button>
+    <br><br>
+    <h4 style="font-family:century gothic;position:relative;left:16%;color:white">Программа</h4><br>
+
+    <div style="color:white; width:800px;font-family:century gothic;font-size:21px;position:relative;left:16%;">
+        {{tour.location}}<br><br>
+        <img width="800" height="470" alt="Здесь достопримечательность"
+             src="/static/img/tour_{{tour.id}}_pics/landmark_{{tour.id}}.jpg">
+        <p style="color:grey"><i>Гора Олимп</i></p>
+    </div>
+    <br><br>
+    <h4 style="font-family:century gothic;position:relative;left:16%;color:white">Возвращение домой</h4><br>
+
+    <div style="color:white; width:800px;font-family:century gothic;font-size:21px;position:relative;left:16%;">
+        {{tour.go_back}}<br><br>
+    </div>
+    <br>
+    <p>
+    <div id="bron">
+        {% if tour.id in b_inds %}
+        <h2 style="font-family:century gothic;position:relative;left:16%;color:white">Вы забронировали этот тур</h2><br>
+        <button style="width:350px;height:70px;font-family:century gothic;font-size:23px;position:relative;left:16%;"
+                onclick="document.location='/booked_tours'"
+                type="button" class="btn btn-outline-light">Забронированные туры
+        </button>
+        {% else %}
+        <button style="width:300px;height:70px;font-family:century gothic;font-size:23px;position:relative;left:16%;"
+                onclick="document.location='/send_app_form/{{tour.id}}'"
+                type="button" class="btn btn-outline-light">Забронировать тур
+        </button>
+
+        {%endif%}
+    </div>
+
+    <br id="feedbacks">
+    <br><br>
+    <h1 style="font-family:century gothic;position:relative;left:2%;color:white">Отзывы</h1><br>
+    <button style="width:200px;height:40px;font-family:century gothic;font-size:18px;position:relative;left:2%;"
+            onclick="document.location='/write_feedback/{{tour.id}}'"
+            type="button" class="btn btn-outline-light">Оставить отзыв
+    </button>
+    <br><br>
+    {% if not feedbacks %}
+    <h5 style="font-family:century gothic;position:relative;left:2%;color:white">Пока никто не оставил отзыв</h5>
+    {%else%}
+    <div>
+        {% for i in feedbacks %}
+        <div class="card text-left"
+             style="background-image:url(/static/img/sky.jpg);color:white;font-family:century gothic">
+            <div class="card-header">
+                <div style="font-family:century gothic" aria-current="page">
+                    {% if not i[0].author.avatar %} <img src="/static/img/avatar.jpg" alt="Avatar" class="avatar">
+                    {% else %} <img src={{i[0].author.avatar}} alt="Avatar" class="avatar"> {% endif %}
+                    {{i[0].author.name}}
+                    {{i[0].author.surname}}
+                    <div style="position:absolute;left:20%;top:4%;font-size:18px">
+                        {{i[0].tour.name}}
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Достоинства</h5>
+                <p class="card-text">{{i[0].pluses}}</p>
+                <h5 class="card-title">Недостатки</h5>
+                <p class="card-text">{{i[0].minuses}}</p>
+                <h5 class="card-title">Комментарий</h5>
+                <p class="card-text">{{i[0].comment}}</p>
+
+                <section class="pictures">
+                    {% for j in i[1] %}
+                    <a href="#{{j}}">
+                        <img src="{{j}}" style="width:100px">
+                    </a>
+                    <a id="{{j}}" href="#" class="full" style="background-image:url({{j}})"></a>
+                    {% endfor %}
+                </section>
+
+            </div>
+            <div class="card-footer">
+                {{i[0].date.date()}}
+            </div>
+        </div>
+        <br>
+        {%endfor%}
+    </div>
+
+    {% endif %}
+
 </div>
 
 

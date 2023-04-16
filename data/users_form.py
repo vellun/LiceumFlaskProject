@@ -6,14 +6,21 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from data.db_session import SqlAlchemyBase
 
-users_to_tours = sqlalchemy.Table(  # Вспомогательная таблица тк отношение многие ко многим
+users_to_tours = sqlalchemy.Table(  # Вспомогательная таблица(для избранных туров)
     'users_to_tours',
     SqlAlchemyBase.metadata,
     sqlalchemy.Column('users', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('users.id')),
     sqlalchemy.Column('tours', sqlalchemy.Integer,
-                      sqlalchemy.ForeignKey('tours.id'))
-)
+                      sqlalchemy.ForeignKey('tours.id')))
+
+users_to_booked_tours = sqlalchemy.Table(  # Вспомогательная таблица(для забронированных туров)
+    'users_to_booked_tours',
+    SqlAlchemyBase.metadata,
+    sqlalchemy.Column('users_who_booked', sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey('users.id')),
+    sqlalchemy.Column('booked_tours', sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey('tours.id')))
 
 
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):

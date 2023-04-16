@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<title>Отзыв</title>
+<center>
+    <h2 style="font-family:century gothic;font-size:42px;color:white">Оставить отзыв</h2>
+</center>
+<form action="" method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.score.label }}<br>
+        {{ form.score(class="form-control form-control-sm", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:37px") }}<br>
+        {% for error in form.score.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    <p>
+        {{ form.pluses.label }}<br>
+        {{ form.pluses(class="form-control form-control-sm", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:80px") }}<br>
+        {% for error in form.pluses.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+
+    <p>
+        {{ form.minuses.label }}<br>
+        {{ form.minuses(class="form-control form-control-sm", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:80px") }}<br>
+        {% for error in form.minuses.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+
+    <p>
+        {{ form.comment.label }}<br>
+        {{ form.comment(class="form-control form-control-sm", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:80px") }}<br>
+        {% for error in form.comment.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+
+    <p>
+        {{ form.file.label }}<br>
+        {{ form.file(type="file", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:37px") }}<br>
+
+        {% for error in form.file.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+
+    <br>
+    <p>{{ form.submit(type="submit", class="btn btn-outline-success", value="Отправить") }}</p>
+
+    <p>{{message}}</p>
+    <style>p {
+    width:1000px;
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+    font-family:century gothic
+    }
+    </style>
+</form>
+{% endblock %}

@@ -7,3 +7,11 @@ p {
     }
 
 
+#card {
+    width:1000px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family:century gothic;
+    background-image:url(/static/img/green_sky.jpg);
+    color:white
+}

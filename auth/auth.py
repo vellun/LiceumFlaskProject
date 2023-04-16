@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template
+from flask import Blueprint, redirect, render_template, flash
 from flask_login import login_user
 
 from data.db_session import create_session
@@ -23,7 +23,9 @@ def login():
                                    message="Неправильный логин или пароль",
                                    form=form)
         login_user(user, remember=form.remember_me.data)
-        return redirect("/search_tours")
+
+        with open('data/cur_url.txt', "r", encoding="utf-8") as f:  # Получаем адрес страницы с которой ушли
+            return redirect(f.readline())  # И переходим на нее
     return render_template('auth/login.html', form=form)
 
 

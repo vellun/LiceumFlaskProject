@@ -1,15 +1,20 @@
+import sqlite3
+
 from flask import Flask, render_template, redirect, request, jsonify
 from flask_login import LoginManager, login_required, logout_user, current_user
 from flask_restful import Api
 
-from admin.admin import admin
+from admin.admin import admin, change_admin
 from api.tours_api import tour_resource
 from auth.auth import auth
+from data.app_form import AppForm
 from data.db_session import global_init, create_session
+from data.feedbacks_form import Feedback
 from data.register_form import RegisterForm
 from data.tours_form import Tour
 from data.upload_form import UploadForm
 from data.users_form import User
+from data.write_feedback_form import WriteFeedbackForm
 
 app = Flask(__name__)
 api = Api(app)
@@ -26,6 +31,17 @@ app.register_blueprint(admin, url_prefix='/admin')  # Регистрация Blu
 api.add_resource(tour_resource.ToursList, '/api/tours')  # для списка туров
 api.add_resource(tour_resource.TourResourse, '/api/tours/<int:tour_id>')  # для одного тура
 
+CUR_URL = None
+
+
+# Функция для запоминания предыдущего url страницы
+def cur_url(url):
+    global CUR_URL
+    CUR_URL = url
+
+    with open('data/cur_url.txt', "w", encoding="utf-8") as f:
+        f.write(CUR_URL)  # Запись в файл
+
 
 @login_manager.user_loader
 def load_user(user_id):  # Функция для получения пользователя
@@ -37,18 +53,23 @@ def load_user(user_id):  # Функция для получения пользо
 @login_required
 def logout():  # Функция для выхода из аккаунта
     logout_user()
-    return redirect("/")
+    return redirect(CUR_URL)
 
 
 @app.route('/')  # Главная страница
 def main_page():
+    change_admin(False)  # Делаем пользователя не админом чтобы при входе в админку попросить авторизоваться
+    cur_url(request.base_url)
     return render_template("main_page.html")
 
 
 @app.route('/search_tours', methods=['GET', 'POST'])
 def search():  # Функция для показа всех туров или туров по поиску
+    change_admin(False)
     db_sess = create_session()
     last_tour = None
+
+    cur_url(request.base_url)  # Запоминаем url чтобы после добавления в избранное вернуться обратно
 
     if request.method == 'GET':  # Если нужно получить все туры
         tours = db_sess.query(Tour).all()
@@ -64,12 +85,13 @@ def search():  # Функция для показа всех туров или �
 @app.route('/add_to_favourites/<int:id>')
 @login_required
 def add_to_favourites(id):  # Функция для добавления тура в избранное
+    global CUR_URL
     db_sess = create_session()
     tour = db_sess.query(Tour).filter(Tour.id == id).first()
     local_user = db_sess.merge(current_user)
     tour.users.append(local_user)  # Добавление пользователя в список к туру
     db_sess.commit()
-    return redirect("/search_tours")
+    return redirect(CUR_URL)
 
 
 @app.route('/favourites')
@@ -77,6 +99,7 @@ def add_to_favourites(id):  # Функция для добавления тур�
 def favourites():  # Функция для отображения избранных туров
     last_tour = None
 
+    cur_url(request.base_url)
     tours = current_user.tours
     tours = [tours[i:i + 2] for i in range(0, len(tours), 2)]  # Формируем туры по парам чтобы расположить на странице
     if tours and len(tours[-1]) % 2:  # Если в последнюю пару попал один тур, записываем его в отдельную переменную
@@ -87,6 +110,7 @@ def favourites():  # Функция для отображения избранн
 @app.route('/fav_delete/<int:tour_id>')
 @login_required
 def fav_delete(tour_id):  # Функция для удаления тура из избранного
+
     db_sess = create_session()
     del_tour = list(filter(lambda x: x.id == tour_id, current_user.tours))[0]
 
@@ -99,25 +123,27 @@ def fav_delete(tour_id):  # Функция для удаления тура из
 
 @app.route('/more_detailed/<int:id>')
 def more_detailed(id):  # Подробнее о туре
+    change_admin(False)
+    cur_url(request.base_url)
     db_sess = create_session()
     tour = db_sess.query(Tour).filter(Tour.id == id).first()
+    # Индексы чтобы проверить наличие тура в списках
     inds = [i.id for i in current_user.tours] if current_user.is_authenticated else []
-    return render_template("more_detailed.html", tour=tour, inds=inds)
+    b_inds = [i.id for i in current_user.booked_tours] if current_user.is_authenticated else []
+    cur_url(f'/more_detailed/{id}')  # Запоминаем url чтобы после добавления в избранное вернуться обратно
+
+    feedbacks = tour.feedbacks  # Отзывы о туре
+    feedbacks = [[i, i.pics.split(';')] for i in feedbacks]  # Список из отзывов и картинок к ним
+    feedbacks.reverse()
+
+    return render_template("more_detailed.html", tour=tour, inds=inds, b_inds=b_inds, feedbacks=feedbacks)
 
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
-    form = UploadForm()
-
-    if form.validate_on_submit():
-        if form.file.data.filename.split(".")[-1] in ["jpg", "jpeg", "png", "gif"]:
-            form.file.data.save('static/img/user_imgs/user_avatar.jpg')
-
-            db_sess = create_session()
-            current_user.avatar = '/static/img/user_imgs/user_avatar.jpg'
-            db_sess.merge(current_user)
-            db_sess.commit()
-    return render_template("profile.html", form=form)
+    cur_url(request.base_url)
+    tours = current_user.tours
+    return render_template("profile.html", tours=tours)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -149,9 +175,10 @@ def edit_profile():  # Редактирование профиля пользо�
             set_values()
             return render_template("edit_profile.html", form=form, upload_form=upload_form,
                                    message="Ошибка. Загрузите фото")
-        upload_form.file.data.save('static/img/user_imgs/user_avatar.jpg')  # Сохраняем новое фото профиля
+        upload_form.file.data.save(
+            f'static/img/user_imgs/user_{current_user.id}_avatar.jpg')  # Сохраняем новое фото профиля
         db_sess = create_session()
-        current_user.avatar = '/static/img/user_imgs/user_avatar.jpg'  # Меняем фото профиля
+        current_user.avatar = f'/static/img/user_imgs/user_{current_user.id}_avatar.jpg'  # Меняем фото профиля
         db_sess.merge(current_user)
         db_sess.commit()
         set_values()
@@ -161,9 +188,100 @@ def edit_profile():  # Редактирование профиля пользо�
 
 @app.route('/about_us')
 def about_us():
+    cur_url(request.base_url)
     return render_template("about_us.html")
 
 
+@app.route("/send_app_form/<int:tour_id>", methods=["GET", "POST"])
+@login_required
+def send_app_form(tour_id):  # Отправка заявки на участие в туре
+    db_sess = create_session()
+    tour = db_sess.query(Tour).get(tour_id)
+    cur_url(request.base_url)
+    form = AppForm()
+    if request.method == 'GET':
+        form.email.data = current_user.email
+    if form.validate_on_submit():
+        sqlite_connection = sqlite3.connect('db/travel_agency.db')
+        cursor = sqlite_connection.cursor()
+
+        # Добавляем данные в таблицу с помощью sqlite
+        sqlite_insert_query = f"""INSERT INTO users_to_booked_tours
+                                  (users_who_booked, booked_tours)
+                                  VALUES ({current_user.id}, {tour.id});"""
+        cursor.execute(sqlite_insert_query)
+        sqlite_connection.commit()
+        cursor.close()
+        return redirect("/booking")
+    return render_template("send_app_form.html", form=form, tour=tour)
+
+
+@app.route("/booking")  # Сообщение после отправления заявки
+def booking():
+    cur_url(request.base_url)
+    return render_template("booking.html")
+
+
+@app.route("/booked_tours")  # Забронированные полеты
+def booked_tours():
+    cur_url(request.base_url)
+    return render_template("booked_tours.html")
+
+
+@app.route("/cancel_booking/<int:tour_id>")
+def cancel_booking(tour_id):
+    pass
+
+
+@app.route("/write_feedback/<int:tour_id>", methods=["GET", "POST"])
+@login_required
+def write_feedback(tour_id):  # Отзыв
+    global CUR_URL
+    form = WriteFeedbackForm()
+    db_sess = create_session()
+    tour = db_sess.query(Tour).get(tour_id)
+    paths = []
+    if form.validate_on_submit():
+
+        feedback = Feedback(scoring=form.score.data,  # Создаем отзыв
+                            pluses=form.pluses.data,
+                            minuses=form.minuses.data,
+                            comment=form.comment.data,
+                            author_id=current_user.id,
+                            tour_id=tour_id)
+
+        db_sess.add(feedback)
+        db_sess.commit()
+
+        files = form.file.data
+        for i in range(len(files)):
+            if not files[i].filename.split(".")[-1] in ["jpg", "jpeg", "png", "gif"]:  # Если выбранный файл не фото
+                return render_template("write_feedback.html", tour=tour, form=form, message="Ошибка. Загрузите фото")
+            files[i].save(
+                f'static/img/feedbacks_pics/user_{current_user.id}_tour_{tour.id}_feedback_{feedback.id}_{i}.jpg')  # Сохраняем фото отзыва
+            paths.append(
+                f'/static/img/feedbacks_pics/user_{current_user.id}_tour_{tour.id}_feedback_{feedback.id}_{i}.jpg')
+
+        feedback.pics = ';'.join(paths)
+        db_sess.commit()
+
+        f = open('data/cur_url.txt', "r", encoding="utf-8")
+        return redirect(f.readline())
+    return render_template("write_feedback.html", tour=tour, form=form)
+
+
+@app.route('/feedbacks', methods=['GET', 'POST'])
+def feedbacks():  # Отзывы
+    cur_url(request.base_url)
+    db_sess = create_session()
+    feedbacks = db_sess.query(Feedback).all()
+    feedbacks = [[i, i.pics.split(';')] for i in feedbacks]  # Список из отзывов и картинок к ним
+    feedbacks.reverse()  # Переворачиваем список чтобы сверху отображались свежие отзывы
+
+    return render_template("feedbacks.html", feedbacks=feedbacks)
+
+
+@app.errorhandler(500)
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({'error': 'Not found'}), 404
@@ -171,6 +289,7 @@ def not_found(error):
 
 @app.errorhandler(401)  # Ошибка аутентификации
 def not_authenticated(_):
+    # cur_url(request.base_url)
     return redirect("/auth/login")
 
 

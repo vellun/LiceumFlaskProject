@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 align="center" style="color:white;font-family:century gothic">Забронированные туры</h3>
+<br>
+{% if current_user.booked_tours %}
+{% for tour in current_user.booked_tours %}
+<div class="card mb-3" style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic;
+width:800px;margin-left:auto;margin-right:auto">
+    <div class="card-body">
+        <h5 class="card-title">{{ tour.name }}</h5>
+        <p class="card-text">{{ tour.price }} руб.</p>
+        <p class="card-text">{{tour.start_date.date()}} — {{tour.end_date.date()}}</p>
+        <a href="/more_detailed/{{tour.id}}">Перейти</a>
+        <a class="btn btn-outline-danger" style="position:absolute;left:75%;bottom:5%"
+           href="/cancel_booking/{{tour.id}}">Отменить бронь</a>
+    </div>
+</div>
+{% endfor %}
+{%else%}
+<center>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1 style="color:white;font-family:century gothic;">У вас нет активных броней</h1>
+    <br>
+    <h3 style="color:white;font-family:century gothic;">Найдите путешествие по душе!</h3>
+    <br><br>
+
+    <button onclick="document.location='/search_tours'"
+            style="font-family:century gothic;font-size:23px;width:300px;height:70px"
+            type="button" class="btn btn-outline-light">К турам
+    </button>
+</center>
+
+{%endif%}
+
+{% endblock %}

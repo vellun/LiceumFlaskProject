@@ -13,4 +13,7 @@ class TourForm(FlaskForm):
     price = IntegerField('Стоимость', validators=[DataRequired()])
     file = FileField('Фотография места')
     full_description = TextAreaField('Подробное описание', validators=[DataRequired()])
+    arrival = TextAreaField('Описание пути на место', validators=[DataRequired()])
+    location = TextAreaField('Основная программа', validators=[DataRequired()])
+    go_back = TextAreaField('Описание возвращения', validators=[DataRequired()])
     submit = SubmitField()

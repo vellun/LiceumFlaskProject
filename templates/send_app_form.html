@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<title>Заявка</title>
+<center>
+    <h2 style="font-family:century gothic;color:white">{{tour.name}}</h2>
+    <br>
+    <h3 style="font-family:century gothic;color:white">Заявка на бронирование</h3>
+
+</center>
+<br>
+<p class="ph" style="font-size:20px">
+        Стоимость: {{tour.price}} руб./чел.</p>
+<p class="ph" style="font-size:20px">
+        Даты: {{tour.start_date.date()}} — {{tour.end_date.date()}}</p>
+<br>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p class="ph">
+        {{ form.fio.label }}<br>
+        {{ form.fio(class="form-control form-control-sm", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:37px") }}<br>
+        {% for error in form.fio.errors %}</p>
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    <p class="ph">
+        {{ form.email.label }}<br>
+        {{ form.email(class="form-control form-control-sm", type="email", style="background-image:
+        url(/static/img/sky.jpg);color: white;height:37px") }}<br>
+        {% for error in form.email.errors %}</p>
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    </p>
+    <p class="ph">
+        {{ form.tel.label }}<br>
+        {{ form.tel(class="form-control form-control-sm", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:37px") }}<br>
+        {% for error in form.tel.errors %}</p>
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    <p class="ph">
+        {{ form.kolv.label }}<br>
+        {{ form.kolv(class="form-control form-control-sm", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:37px") }}<br>
+        {% for error in form.kolv.errors %}</p>
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>{%endfor%}
+
+    <p class="ph">
+        {{ form.comm.label }}<br>
+        {{ form.comm(class="form-control form-control-sm", style="background-image:
+        url(/static/img/sky.jpg);color:white;height:70px") }}<br>
+        {% for error in form.comm.errors %}</p>
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {%endfor%}
+
+    <p class="ph">{{ form.submit(type="submit", class="btn btn-outline-success") }}</p>
+    <p class="ph">{{message}}</p>
+</form>
+{% endblock %}

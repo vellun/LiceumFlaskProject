@@ -11,7 +11,7 @@
    style="font-family:century gothic;font-size:20px;width:260px;height:42px;position:absolute;left:2%">Добавить тур</a>
 
 <center>
-    <h1 style="color:white;font-family:century gothic;">Космические туры</h1></center>
+    <h1 style="color:white;font-family:century gothic;">Управление турами</h1></center>
 <br>
 
 
@@ -29,7 +29,7 @@
                     <p>Стоимость: {{ tour[0].price }} руб.</p>
                 </div>
                 <a href="/admin/edit_tour/{{ tour[0].id }}" class="btn btn-dark">Редактировать</a>
-                <a href="/admin/delete_tour/{{ tour[0].id }}" class="btn btn-danger">Удалить</a>
+                <a href="/admin/confirmation_delete/{{tour[0].id}}" class="btn btn-danger">Удалить</a>
 
                 <a href="/admin/download_tours/{{ tour[0].id }}" download="tour_{{tour[0].id}}.json"
                    title="Скачать json для тура {{tour[0].id}}" class="btn btn-outline-light"
@@ -50,7 +50,7 @@
                     <p>Стоимость: {{ tour[1].price }} руб.</p>
                 </div>
                 <a href="/admin/edit_tour/{{ tour[1].id }}" class="btn btn-dark">Редактировать</a>
-                <a href="/admin/delete_tour/{{ tour[1].id }}" class="btn btn-danger">Удалить</a>
+                <a href="/admin/confirmation_delete/{{tour[1].id}}" class="btn btn-danger">Удалить</a>
 
                 <a href="/admin/download_tours/{{ tour[1].id }}" download="tour_{{tour[1].id}}.json"
                    title="Скачать json для тура {{tour[1].id}}" class="btn btn-outline-light"
@@ -76,7 +76,7 @@
                     <p>Стоимость: {{ last_tour[0].price }} руб.</p>
                 </div>
                 <a href="/admin/edit_tour/{{ last_tour[0].id }}" class="btn btn-dark">Редактировать</a>
-                <a href="/admin/delete_tour/{{ last_tour[0].id }}" class="btn btn-danger">Удалить</a>
+                <a href="/admin/confirmation_delete/{{last_tour[0].id}}" class="btn btn-danger">Удалить</a>
 
                 <a href="/admin/download_tours/{{ last_tour[0].id }}" download="tour_{{last_tour[0].id}}.json"
                    title="Скачать json для тура {{last_tour[0].id}}" class="btn btn-outline-light"

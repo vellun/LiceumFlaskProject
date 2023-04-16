@@ -2,18 +2,43 @@
 
 {% block content %}
 
-<div style="margin-left: 300px">
+<h3 style="color:white;font-family:century gothic;position:relative;left:43%;">Избранные туры</h3>
+<br>
+{% if current_user.tours %}
+{% for tour in current_user.tours %}
+<div class="card mb-3" style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic;
+width:800px;position:relative;left:43%;">
+  <div class="card-body">
+    <h5 class="card-title">{{ tour.name }}</h5>
+      <p class="card-text">{{ tour.price }} руб.</p>
+    <a href="/more_detailed/{{tour.id}}">Перейти</a>
+  </div>
+</div>
+{% endfor %}
+{%else%}
+    <button onclick="document.location='/search_tours'"
+            style="font-family:century gothic;font-size:23px;position:absolute;left:43%;;width:250px;height:65px;"
+            type="button" class="btn btn-outline-light">Найти туры
+    </button>
+
+{%endif%}
+
+
+<div style="left:15%;position:absolute;top:30%">
     <br>
     <br>
     <br>
     <a class="nav-link active style=font-family:century gothic" aria-current="page" href="#">
-                    {% if not current_user.avatar %} <img src="/static/img/avatar.jpg" alt="Avatar" class="profile_avatar">
-                    {% else %} <img src={{current_user.avatar}} alt="Avatar" class="profile_avatar"> {% endif %}</a>
+        {% if not current_user.avatar %} <img src="/static/img/avatar.jpg" alt="Avatar" class="profile_avatar">
+        {% else %} <img src={{current_user.avatar}} alt="Avatar" class="profile_avatar"> {% endif %}</a>
     <br>
-    <p style="color: white;font-family:century gothic;font-size: 26px">{{ current_user.name }} {{ current_user.surname }}</p>
+    <p style="color: white;font-family:century gothic;font-size: 26px">{{ current_user.name }} {{ current_user.surname
+        }}</p>
     <br>
     <a href="/edit_profile" class="btn btn-outline-success">Редактировать профиль</a>
 
 </div>
+
+
 
 {% endblock %}

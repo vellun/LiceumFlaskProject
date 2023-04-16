@@ -1,0 +1,25 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<center>
+    <h1 style="color:white;font-family:century gothic;">Управление пользователями</h1></center>
+<br>
+{% for user in users %}
+
+
+<div class="card" id="card">
+  <div class="card-header">
+    Пользователь №{{user[0].id}}
+  </div>
+  <div class="card-body">
+    <blockquote class="blockquote mb-0">
+      <p class="user_p">{{user[0].name}} {{user[0].surname}}</p>
+      <a href="#">Отзывы: {{user[1]}}</a>
+      <a href="#" style="position:absolute;left:14%">Жалобы: 0</a>
+      <a href="#" style="position:absolute;left:85%" class="btn btn-outline-danger">Блокировать</a>
+    </blockquote>
+  </div>
+</div>
+<br>
+{% endfor %}
+{% endblock %}

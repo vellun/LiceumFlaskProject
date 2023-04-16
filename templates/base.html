@@ -11,8 +11,6 @@
 </head>
 <body class="p-3 m-0 border-0 bd-example" style="background-color:black">
 
-<!-- Example Code -->
-
 <nav class="navbar navbar-dark bg-dark fixed-top" style="background:url(/static/img/sky.jpg)">
     <div class="container-fluid">
         <a class="navbar-brand" href="/" style="font-family:century gothic;font-size: 27px;color:#d6c3d6">
@@ -64,7 +62,7 @@
                         <a class="nav-link active" aria-current="page" href="/favourites">Избранные туры</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Предстоящие полеты</a>
+                        <a class="nav-link active" aria-current="page" href="/booked_tours">Забронированные полеты</a>
                     </li>
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
@@ -76,7 +74,14 @@
         </div>
     </div>
 </nav>
+
+
 {% block content %} {% endblock %}
+<!--<div id="wrapper">-->
+<!--<header id="header"> </header>-->
+<!--<div id="content"> </div>-->
+<!--</div>-->
+<!--<footer id="footer"> </footer>-->
 </body>
 <!--  <footer>-->
 <!-- <div class="footer-bg" style="background:url(/static/img/planet.jpg)">-->
