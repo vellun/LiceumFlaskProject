@@ -6,9 +6,26 @@
 <p align="center" class="divv" style="font-family:century gothic;font-size:23px;width:880px;height:90px;
 margin-left:auto;margin-right:auto;color:white">Подтвердите удаление, это действие нельзя отменить.</p>
 
-<button style="font-family:century gothic;font-size:23px;position: absolute;left:40%;top:140%;width:250px;height:60px"
-        onclick="window.history.go(-1)"
+{% if tour_id %}
+<button style="font-family:century gothic;font-size:23px;position: absolute;left:30%;;width:250px;height:60px"
+        onclick="document.location='/admin/tours_management'"
         type="button" class="btn btn-outline-light">Назад
 </button>
+
+<button style="font-family:century gothic;font-size:23px;position: absolute;left:50%;;width:250px;height:60px"
+        onclick="document.location='/admin/delete_tour/{{tour_id}}'"
+        type="submit" class="btn btn-outline-danger">Удалить
+</button>
+{% elif feedback_id %}
+<button style="font-family:century gothic;font-size:23px;position: absolute;left:30%;;width:250px;height:60px"
+        onclick="document.location='/admin/feedbacks_management'"
+        type="button" class="btn btn-outline-light">Назад
+</button>
+
+<button style="font-family:century gothic;font-size:23px;position: absolute;left:50%;;width:250px;height:60px"
+        onclick="document.location='/admin/delete_feedback/{{feedback_id}}'"
+        type="submit" class="btn btn-outline-danger">Удалить
+</button>
+{% endif %}
 
 {% endblock %}

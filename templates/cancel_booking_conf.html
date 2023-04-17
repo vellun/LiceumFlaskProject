@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br><br><br><br>
+<p align="center" class="divv" style="font-family:century gothic;font-size:23px;width:880px;height:90px;
+margin-left:auto;margin-right:auto;color:white">Вы уверены, что ходите отменить бронь?</p>
+
+<button style="font-family:century gothic;font-size:23px;position: absolute;left:30%;;width:250px;height:60px"
+        onclick="document.location='/booked_tours'"
+        type="button" class="btn btn-outline-light">Назад
+</button>
+
+<button style="font-family:century gothic;font-size:23px;position: absolute;left:50%;;width:250px;height:60px"
+        onclick="document.location='/cancel_booking/{{tour_id}}'"
+        type="submit" class="btn btn-outline-danger">Подтвердить
+</button>
+
+{% endblock %}

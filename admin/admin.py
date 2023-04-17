@@ -2,17 +2,15 @@ import datetime
 import json
 
 from flask import Blueprint, redirect, render_template, send_file, request, abort
-from flask_login import login_user, login_required, current_user, logout_user
-from flask_wtf import FlaskForm
+from flask_login import login_user, login_required, logout_user
 from requests import get, post, delete
-from wtforms import SubmitField
 
-from .data.tour_form import TourForm
 from data.db_session import create_session
 from data.feedbacks_form import Feedback
 from data.login_form import LoginForm
 from data.tours_form import Tour
 from data.users_form import User
+from .data.tour_form import TourForm
 
 """ Админ-панель(для работы используется api) """
 
@@ -51,6 +49,15 @@ def tours_management():
     if tours and len(tours[-1]) % 2:  # Если в последнюю пару попал один тур, записываем его в отдельную переменную
         last_tour, tours = tours[-1], tours[:-1]
     return render_template("admin/tours_manage.html", tours=tours, last_tour=last_tour)
+
+
+@admin.route('/feedbacks_management')  # Управление отзывами
+def feedbacks_management():
+    db_sess = create_session()
+    feedbacks = db_sess.query(Feedback).all()
+    feedbacks = [[i, i.pics.split(';') if i.pics else []] for i in feedbacks]  # Список из отзывов и картинок к ним
+    feedbacks.reverse()  # Переворачиваем список чтобы сверху отображались свежие отзывы
+    return render_template("admin/feedbacks_manage.html", feedbacks=feedbacks)
 
 
 @admin.route('/add_tour', methods=["GET", 'POST'])  # Добавление нового тура
@@ -125,16 +132,23 @@ def delete_tour(tour_id):
     return redirect("/admin/tours_management")
 
 
-class Form(FlaskForm):
-    submit = SubmitField("Подтвердить")
-
-
 @admin.route('/confirmation_delete/<int:tour_id>')  # Подтвержение удаления
 def confirmation_delete(tour_id):
-    form = Form()
-    # if form.validate_on_submit():
-    #     return redirect(f"/delete_tour/{tour_id}")
-    return render_template("admin/confirmation_delete.html", form=form)
+    return render_template("admin/confirmation_delete.html", tour_id=tour_id)
+
+
+@admin.route('/delete_feedback/<int:feedback_id>', methods=["GET", 'POST'])  # Удаление отзыва
+def delete_feedback(feedback_id):
+    db_sess = create_session()
+    feedback = db_sess.query(Feedback).get(feedback_id)
+    db_sess.delete(feedback)
+    db_sess.commit()
+    return redirect("/admin/feedbacks_management")
+
+
+@admin.route('/confirmation_delete_feedback/<int:feedback_id>')  # Подтвержение удаления
+def confirmation_delete_feedback(feedback_id):
+    return render_template("admin/confirmation_delete.html", feedback_id=feedback_id)
 
 
 @admin.route('/download_tours')
@@ -170,6 +184,8 @@ def login():
     if form.validate_on_submit():
         db_sess = create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
+        if not user:
+            return render_template('admin/login.html', message="Пользователь не найден", form=form)
         if not user.is_admin:  # Если пользователь не явдяется админом
             return render_template('admin/login.html', message="Вы не обладаете правами администратора.", form=form)
         if user and user.check_password(form.password.data):

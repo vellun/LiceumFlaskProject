@@ -1,0 +1,50 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+
+<center>
+    <h1 style="color:white;font-family:century gothic;">Управление отзывами</h1></center>
+<br>
+
+{% for i in feedbacks %}
+<div class="card text-left"
+     style="background-image:url(/static/img/green_sky.jpg);color:white;font-family:century gothic">
+    <div class="card-header">
+        <div style="font-family:century gothic" aria-current="page">
+            {% if not i[0].author.avatar %} <img src="/static/img/avatar.jpg" alt="Avatar" class="avatar">
+            {% else %} <img src={{i[0].author.avatar}} alt="Avatar" class="avatar"> {% endif %}
+            {{i[0].author.name}}
+            {{i[0].author.surname}}
+            <div style="position:absolute;left:20%;top:4%;font-size:18px">
+                {{i[0].tour.name}}
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Достоинства</h5>
+        <p id class="card-text">{{i[0].pluses}}</p>
+        <h5 class="card-title">Недостатки</h5>
+        <p class="card-text">{{i[0].minuses}}</p>
+        <h5 class="card-title">Комментарий</h5>
+        <p class="card-text">{{i[0].comment}}</p>
+
+        <section class="pictures">
+            {% for j in i[1] %}
+            <a href="#{{j}}">
+                <img src="{{j}}" style="width:100px">
+            </a>
+            <a id="{{j}}" href="#" class="full" style="background-image:url({{j}})"></a>
+            {% endfor %}
+        </section>
+
+    </div>
+    <div class="card-footer">
+        {{i[0].date.date()}}
+        <a style="position:relative;left:85%;width:100px" href="/admin/confirmation_delete_feedback/{{i[0].id}}"
+           class="btn btn-danger">Удалить</a>
+    </div>
+</div>
+<br>
+{%endfor%}
+
+{% endblock %}

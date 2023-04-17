@@ -19,7 +19,7 @@
         {{ error }}
     </p>
     {% endfor %}
-    </p>
+
     <p class="ph">
         {{ form.password.label }}<br>
         {{ form.password(class="form-control form-control-sm", type="password", style="background-image:
@@ -29,7 +29,7 @@
         {{ error }}
     </p>
     {% endfor %}
-    </p>
+    <a href="/auth/forgot_password">Забыли пароль?</a>
     <p class="ph">{{ form.remember_me() }} {{ form.remember_me.label }}</p>
 
     <p class="ph">{{ form.submit(type="submit", class="btn btn-outline-success") }} <br><br> Еще нет

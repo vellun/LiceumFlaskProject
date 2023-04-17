@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, flash
+from flask import Blueprint, redirect, render_template
 from flask_login import login_user
 
 from data.db_session import create_session
@@ -46,3 +46,10 @@ def reqister():
         db_sess.commit()
         return redirect('./login')
     return render_template('auth/register.html', form=form)
+
+
+@auth.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    """ Функция для сброса пароля """
+
+    return redirect('/auth/login')

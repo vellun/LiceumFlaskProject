@@ -133,7 +133,7 @@ def more_detailed(id):  # Подробнее о туре
     cur_url(f'/more_detailed/{id}')  # Запоминаем url чтобы после добавления в избранное вернуться обратно
 
     feedbacks = tour.feedbacks  # Отзывы о туре
-    feedbacks = [[i, i.pics.split(';')] for i in feedbacks]  # Список из отзывов и картинок к ним
+    feedbacks = [[i, i.pics.split(';') if i.pics else []] for i in feedbacks]  # Список из отзывов и картинок к ним
     feedbacks.reverse()
 
     return render_template("more_detailed.html", tour=tour, inds=inds, b_inds=b_inds, feedbacks=feedbacks)
@@ -141,7 +141,7 @@ def more_detailed(id):  # Подробнее о туре
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
-    cur_url(request.base_url)
+    cur_url("/")
     tours = current_user.tours
     return render_template("profile.html", tours=tours)
 
@@ -230,7 +230,23 @@ def booked_tours():
 
 @app.route("/cancel_booking/<int:tour_id>")
 def cancel_booking(tour_id):
-    pass
+    db_sess = create_session()
+    del_tour = list(filter(lambda x: x.id == tour_id, current_user.booked_tours))[0]
+
+    current_user.booked_tours.remove(del_tour)  # Удаление из списка броней
+    db_sess.merge(current_user)
+    db_sess.commit()
+    return redirect("/cancel_booking_message")
+
+
+@app.route("/cancel_booking_confirmation/<int:tour_id>")  # Подтверждение отмены брони
+def cancel_booking_conf(tour_id):
+    return render_template("cancel_booking_conf.html", tour_id=tour_id)
+
+
+@app.route("/cancel_booking_message")  # Подтверждение отмены брони
+def cancel_booking_mess():
+    return render_template("cancel_booking_mess.html")
 
 
 @app.route("/write_feedback/<int:tour_id>", methods=["GET", "POST"])
@@ -255,7 +271,7 @@ def write_feedback(tour_id):  # Отзыв
 
         files = form.file.data
         for i in range(len(files)):
-            if not files[i].filename.split(".")[-1] in ["jpg", "jpeg", "png", "gif"]:  # Если выбранный файл не фото
+            if files[i] and not files[i].filename.split(".")[-1] in ["jpg", "jpeg", "png", "gif"]:  # Если выбранный файл не фото
                 return render_template("write_feedback.html", tour=tour, form=form, message="Ошибка. Загрузите фото")
             files[i].save(
                 f'static/img/feedbacks_pics/user_{current_user.id}_tour_{tour.id}_feedback_{feedback.id}_{i}.jpg')  # Сохраняем фото отзыва
@@ -275,7 +291,7 @@ def feedbacks():  # Отзывы
     cur_url(request.base_url)
     db_sess = create_session()
     feedbacks = db_sess.query(Feedback).all()
-    feedbacks = [[i, i.pics.split(';')] for i in feedbacks]  # Список из отзывов и картинок к ним
+    feedbacks = [[i, i.pics.split(';') if i.pics else []] for i in feedbacks]  # Список из отзывов и картинок к ним
     feedbacks.reverse()  # Переворачиваем список чтобы сверху отображались свежие отзывы
 
     return render_template("feedbacks.html", feedbacks=feedbacks)

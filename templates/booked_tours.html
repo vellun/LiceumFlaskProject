@@ -14,7 +14,7 @@ width:800px;margin-left:auto;margin-right:auto">
         <p class="card-text">{{tour.start_date.date()}} — {{tour.end_date.date()}}</p>
         <a href="/more_detailed/{{tour.id}}">Перейти</a>
         <a class="btn btn-outline-danger" style="position:absolute;left:75%;bottom:5%"
-           href="/cancel_booking/{{tour.id}}">Отменить бронь</a>
+           href="/cancel_booking_confirmation/{{tour.id}}">Отменить бронь</a>
     </div>
 </div>
 {% endfor %}
