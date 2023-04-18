@@ -6,6 +6,7 @@ from flask_restful import Api
 
 from admin.admin import admin, change_admin
 from api.tours_api import tour_resource
+from api.users_api import users_resource
 from auth.auth import auth
 from data.app_form import AppForm
 from data.db_session import global_init, create_session
@@ -30,6 +31,9 @@ app.register_blueprint(admin, url_prefix='/admin')  # Регистрация Blu
 # Добавление ресурсов api
 api.add_resource(tour_resource.ToursList, '/api/tours')  # для списка туров
 api.add_resource(tour_resource.TourResourse, '/api/tours/<int:tour_id>')  # для одного тура
+
+api.add_resource(users_resource.UsersList, '/api/users')  # для списка пользователей
+api.add_resource(users_resource.UserResourse, '/api/users/<int:user_id>')  # для одного пользователя
 
 CUR_URL = None
 
@@ -136,7 +140,10 @@ def more_detailed(id):  # Подробнее о туре
     feedbacks = [[i, i.pics.split(';') if i.pics else []] for i in feedbacks]  # Список из отзывов и картинок к ним
     feedbacks.reverse()
 
-    return render_template("more_detailed.html", tour=tour, inds=inds, b_inds=b_inds, feedbacks=feedbacks)
+    pics_caption = tour.pics_names.split(";") if tour.pics_names else []
+
+    return render_template("more_detailed.html", tour=tour, inds=inds, b_inds=b_inds, feedbacks=feedbacks,
+                           pics_cap=pics_caption)
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -271,7 +278,8 @@ def write_feedback(tour_id):  # Отзыв
 
         files = form.file.data
         for i in range(len(files)):
-            if files[i] and not files[i].filename.split(".")[-1] in ["jpg", "jpeg", "png", "gif"]:  # Если выбранный файл не фото
+            if files[i] and not files[i].filename.split(".")[-1] in ["jpg", "jpeg", "png",
+                                                                     "gif"]:  # Если выбранный файл не фото
                 return render_template("write_feedback.html", tour=tour, form=form, message="Ошибка. Загрузите фото")
             files[i].save(
                 f'static/img/feedbacks_pics/user_{current_user.id}_tour_{tour.id}_feedback_{feedback.id}_{i}.jpg')  # Сохраняем фото отзыва

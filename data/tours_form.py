@@ -19,6 +19,7 @@ class Tour(SqlAlchemyBase, SerializerMixin):
     arrival = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     location = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     go_back = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    pics_names = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     # Атрибут для получения списка туров пользователя(избранные)
     users = orm.relationship("User", secondary="users_to_tours",

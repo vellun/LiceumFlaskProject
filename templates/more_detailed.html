@@ -100,7 +100,9 @@
         {{tour.arrival}}<br><br>
         <img width="800" height="470" alt="Здесь картинка жилья"
              src="/static/img/tour_{{tour.id}}_pics/house_{{tour.id}}.jpg">
-        <p style="color:grey"><i>Марсианская туристическая база</i></p>
+        {%if pics_cap%}
+        <p style="color:grey"><i>{{pics_cap[0]}}</i></p>
+        {%endif%}
     </div>
 
     <br><br>
@@ -110,7 +112,9 @@
         {{tour.location}}<br><br>
         <img width="800" height="470" alt="Здесь достопримечательность"
              src="/static/img/tour_{{tour.id}}_pics/landmark_{{tour.id}}.jpg">
-        <p style="color:grey"><i>Гора Олимп</i></p>
+        {%if pics_cap%}
+        <p style="color:grey"><i>{{pics_cap[1]}}</i></p>
+        {%endif%}
     </div>
     <br><br>
     <h4 style="font-family:century gothic;position:relative;left:16%;color:white">Возвращение домой</h4><br>
