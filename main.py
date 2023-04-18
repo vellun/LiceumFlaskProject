@@ -244,7 +244,7 @@ def cancel_booking_conf(tour_id):
     return render_template("cancel_booking_conf.html", tour_id=tour_id)
 
 
-@app.route("/cancel_booking_message")  # Подтверждение отмены брони
+@app.route("/cancel_booking_message")  # Сообщение после отмены брони
 def cancel_booking_mess():
     return render_template("cancel_booking_mess.html")
 

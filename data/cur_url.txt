@@ -1,1 +1,1 @@
-http://127.0.0.1:5000/
+/more_detailed/1
